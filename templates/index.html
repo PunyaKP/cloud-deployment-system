@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cloud Deployment</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            margin-top: 100px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            display: inline-block;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .pipeline {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.step {
+    padding: 10px 15px;
+    background: #ddd;
+    border-radius: 5px;
+    margin: 5px;
+    font-weight: bold;
+}
+
+.arrow {
+    font-size: 20px;
+    margin: 0 5px;
+}
+
+.active {
+    background: #4CAF50;
+    color: white;
+}
+    </style>
+</head>
+<body>
+<div style="text-align:center; margin-top:50px;">
+
+    <h1>🚀 Automated Cloud Deployment</h1>
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+    <form id="uploadForm" action="/deploy" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <br><br>
+        <button type="submit">Deploy</button>
+    </form>
+
+    <!-- Progress Bar -->
+    <div id="progressContainer" style="display:none; margin-top:20px;">
+        <p>Deploying...</p>
+        <div style="width:300px; margin:auto; background:#eee; border-radius:10px;">
+            <div id="progressBar" 
+                 style="width:0%; height:20px; background:#4CAF50; border-radius:10px;">
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>   <!-- progress bar end -->
+
+<!-- ✅ ADD HERE -->
+<div id="pipelineFlow" style="margin-top:30px;">
+    <div class="pipeline">
+        <div class="step" id="step1">👨‍💻 Developer</div>
+        <div class="arrow">➡️</div>
+        <div class="step" id="step2">📂 GitHub</div>
+        <div class="arrow">➡️</div>
+        <div class="step" id="step3">⚙️ Jenkins</div>
+        <div class="arrow">➡️</div>
+        <div class="step" id="step4">🐳 Docker</div>
+        <div class="arrow">➡️</div>
+        <div class="step" id="step5">☁️ AWS</div>
+        <div class="arrow">➡️</div>
+        <div class="step" id="step6">🌐 Live</div>
+    </div>
+</div>
+
+<script>
+
+
+document.getElementById("uploadForm").addEventListener("submit", function(event) {
+    
+
+    document.getElementById("progressContainer").style.display = "block";
+    runPipeline();
+
+    let progress = 0;
+    let bar = document.getElementById("progressBar");
+
+    let interval = setInterval(function() {
+        if (progress >= 100) {
+            clearInterval(interval);
+
+            // ✅ AFTER animation, submit form
+            event.target.submit();
+        } else {
+            progress += 10;
+            bar.style.width = progress + "%";
+        }
+    }, 200);
+});
+let steps = ["step1","step2","step3","step4","step5","step6"];
+
+let i = 0;
+function runPipeline() {
+    if (i < steps.length) {
+        document.getElementById(steps[i]).classList.add("active");
+        i++;
+        setTimeout(runPipeline, 800);
+    }
+}
+
+</script>
+
+</body>
+</html>
