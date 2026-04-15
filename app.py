@@ -10,7 +10,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # Home page
 @app.route('/')
 def home():
-    return render_template("index.html", message="", logs="")
+    return render_template("index.html")
 
 # Deploy route
 @app.route('/deploy', methods=['POST'])
@@ -26,41 +26,28 @@ def deploy():
     file.save(filepath)
 
     try:
-            # Git commands
-            os.system("git add .")
-            os.system('git commit -m "Auto deploy commit"')
-            os.system("git push origin main")
+        # Git commands
+        os.system("git add .")
+        os.system('git commit -m "Auto deploy commit"')
+        os.system("git push origin main")
 
-             # Simulate pipeline
-            print("Code pushed to GitHub repository")
-            time.sleep(1)
+        # Simulate pipeline
+        print("Code pushed to GitHub repository")
+        time.sleep(1)
 
-            print("Running Jenkins CI/CD pipeline...")
-            time.sleep(1)
+        print("Running Jenkins CI/CD pipeline...")
+        time.sleep(1)
 
-            print("Building Docker image...")
-            time.sleep(1)
+        print("Building Docker image...")
+        time.sleep(1)
 
-            print("Deploying to AWS EC2...")
-            time.sleep(1)
+        print("Deploying to AWS EC2...")
+        time.sleep(1)
 
-            logs = [
-                "📁 File uploaded",
-                "📦 Code pushed to GitHub",
-                "⚙️ Jenkins pipeline started",
-                "🐳 Docker image built",
-                "☁️ Deployed to AWS",
-                "✅ Live successfully"
-            ]
-            return render_template(
-                "index.html",
-                message="🚀 Deployment Successful!",
-                logs=logs,
-                progress=100
-            )
+        return render_template("index.html", message="🚀 Deployment Successful! App is Live.")
 
     except Exception as e:
-            return f"Error occurred: {e}"
+        return f"Error occurred: {e}"
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
