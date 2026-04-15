@@ -108,6 +108,13 @@
         <div class="step" id="step6">🌐 Live</div>
     </div>
 </div>
+<div style="width:80%; margin:30px auto;">
+    <h3>Deployment Status</h3>
+    <canvas id="myChart"></canvas>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 
@@ -143,7 +150,37 @@ function runPipeline() {
         setTimeout(runPipeline, 800);
     }
 }
+const ctx = document.getElementById('myChart');
 
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['GitHub', 'Jenkins', 'Docker', 'AWS'],
+        datasets: [{
+            label: 'Deployment Progress',
+            data: [100, 100, 100, 100],
+            backgroundColor: [
+                '#4CAF50',
+                '#2196F3',
+                '#FF9800',
+                '#9C27B0'
+            ],
+            borderRadius: 8
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 100
+            }
+        }
+    }
+});
 </script>
 
 </body>
