@@ -10,7 +10,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # Home page
 @app.route('/')
 def home():
-    return render_template("index.html")
+    return render_template("index.html", message="", logs="")
 
 # Deploy route
 @app.route('/deploy', methods=['POST'])
@@ -44,7 +44,11 @@ def deploy():
         print("Deploying to AWS EC2...")
         time.sleep(1)
 
-        return render_template("index.html", message="🚀 Deployment Successful! App is Live.")
+        return render_template(
+    "index.html",
+    message="🚀 Deployment Successful!",
+    logs="File uploaded...\nDocker build...\nDeployed to AWS..."
+)
 
     except Exception as e:
         return f"Error occurred: {e}"
