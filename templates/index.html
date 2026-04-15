@@ -4,6 +4,17 @@
     <title>Cloud Deployment</title>
     <style>
         body {
+    overflow: hidden;
+    height: 100vh;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+}
+        body {
             font-family: Arial;
             text-align: center;
             margin-top: 100px;
@@ -120,26 +131,51 @@
     {% if message %}
         <p>{{ message }}</p>
     {% endif %}
+    {% if logs %}
+<div style="width:90%; margin:auto; margin-top:20px;">
+    <h3>📊 Deployment Dashboard</h3>
 
-    <form id="uploadForm" action="/deploy" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" required>
-        <br><br>
-        <button type="submit">Deploy</button>
-    </form>
-    <div class="charts">
-
-    <div class="chart-box">
-        <h3>Manpower</h3>
-        <canvas id="barChart"></canvas>
-    </div>
-
-    <div class="chart-box">
-        <h3>Progress Curve</h3>
-        <canvas id="lineChart"></canvas>
+    <!-- Progress Bar -->
+    <!-- Progress Bar -->
+<div style="background:#eee; border-radius:10px; overflow:hidden;">
+    
+    <div id="progressBar"
+         style="width: {{ progress }}%; 
+                height: 25px; 
+                background: linear-gradient(to right, #4CAF50, #00c6ff); 
+                color: white; 
+                text-align: center; 
+                line-height: 25px;">
+        {{ progress }}%
     </div>
 
 </div>
 
+    <!-- Logs -->
+    <div style="background:white; padding:15px; margin-top:15px; border-radius:10px;">
+        {% for log in logs %}
+            <p>✔ {{log}}</p>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+    <form id="uploadForm" action="/deploy" method="POST" enctype="multipart/form-data">
+       <div style="display:flex; justify-content:space-around; margin-top:20px;">
+
+    <!-- BAR CHART -->
+    <div style="width:45%; background:white; padding:10px; border-radius:10px;">
+        <h4>📊 Manpower</h4>
+        <canvas id="barChart"></canvas>
+    </div>
+
+    <!-- LINE CHART -->
+    <div style="width:45%; background:white; padding:10px; border-radius:10px;">
+        <h4>📈 Progress</h4>
+        <canvas id="lineChart"></canvas>
+    </div>
+
+</div>
     <!-- Progress Bar -->
     <div id="progressContainer" style="display:none; margin-top:20px;">
         <p>Deploying...</p>
@@ -195,15 +231,19 @@ document.getElementById("uploadForm").addEventListener("submit", function(event)
         }
     }, 200);
 });
-let steps = ["step1","step2","step3","step4","step5","step6"];
-
-let i = 0;
 function runPipeline() {
-    if (i < steps.length) {
-        document.getElementById(steps[i]).classList.add("active");
-        i++;
-        setTimeout(runPipeline, 800);
+    let steps = ["step1","step2","step3","step4","step5","step6"];
+    let i = 0;
+
+    function activateStep() {
+        if (i < steps.length) {
+            document.getElementById(steps[i]).classList.add("active");
+            i++;
+            setTimeout(activateStep, 500);
+        }
     }
+
+    activateStep();
 }
 // BAR CHART
 new Chart(document.getElementById("barChart"), {
