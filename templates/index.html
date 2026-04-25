@@ -109,7 +109,7 @@ button:hover {
     justify-content: center;
     align-items: center;
     gap: 10px;
-    margin: 40px 0;
+    margin: 50px 0;
 }
 
 .step {
@@ -152,9 +152,8 @@ button:hover {
     width: 120px;
     height: 4px;
     margin: 10px auto 30px;
-    background: linear-gradient(90deg, #00ffcc, #00c6ff);
+    background: linear-gradient(90deg, transparent, #00ffc6, transparent);
     border-radius: 10px;
-    box-shadow: 0 0 15px #00ffcc;
 }
 
 .dashboard, .card {
@@ -188,20 +187,21 @@ button:hover {
 
     transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
-    box-shadow:
-        0 0 10px #00ffcc,
-        0 0 30px #00c6ff;
+    #progressBar {
+    box-shadow: 0 0 8px rgba(0,255,200,0.4);
+}
 }
 
 #statusText {
     font-weight: bold;
     color: #00ffcc;
-
-    text-shadow:
-        0 0 10px #00ffcc,
-        0 0 20px #00ffcc,
-        0 0 40px #00ffcc;
+    text-shadow: 0 0 6px rgba(0,255,200,0.6);
 }
+
+#statusText.active {
+    text-shadow: 0 0 12px rgba(0,255,200,0.8);
+}
+
 
 /* logs */
 #logBox {
@@ -213,7 +213,7 @@ button:hover {
 
 /* ANIMATION */
 .fade-in {
-    animation: fadeIn 0.5s ease-in;
+    animation: fadeIn 0.9s ease-in-out;
 }
 
 @keyframes fadeIn {
