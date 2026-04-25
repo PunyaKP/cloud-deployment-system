@@ -231,11 +231,15 @@ h1 {
 
 .graph-container {
     margin-top: 20px;
+    padding: 20px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
 .graph {
     width: 100%;
-    height: 80px;
+    height: 140px;
 }
 
 /* glowing line */
@@ -304,23 +308,27 @@ h1 {
         <!-- PROGRESS -->
         <div class="box">
             <h3>Deployment Progress</h3>
-            <div class="card">
-    <h3>📈 Live System Activity</h3>
+            <div class="graph-container">
+    <h3>📊 Live System Activity</h3>
 
-    <div class="graph-container">
-        <svg viewBox="0 0 300 80" class="graph">
-
-            <defs>
-              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+    <svg class="graph" viewBox="0 0 300 120">
+        <defs>
+            <linearGradient id="cpuGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="#38bdf8"/>
-                <stop offset="100%" stop-color="#0ea5e9"/>
-              </linearGradient>
-            </defs>
+                <stop offset="100%" stop-color="#22c55e"/>
+            </linearGradient>
+        </defs>
 
-            <path id="graphPath" fill="none" stroke="url(#gradient)" stroke-width="3"/>
-            <circle cx="0" cy="0" r="4" class="dot"/>
-        </svg>
-    </div>
+        <!-- CPU line -->
+        <path id="cpuPath" fill="none" stroke="url(#cpuGradient)" stroke-width="3"/>
+
+        <!-- Memory line -->
+        <path id="memPath" fill="none" stroke="#f97316" stroke-width="2"/>
+
+        <!-- moving dot -->
+        <circle id="dot" r="4" fill="#38bdf8"/>
+    </svg>
+</div>
 </div>
             <div class="progress-container">
                 <div id="progressBar"></div>
@@ -414,38 +422,45 @@ document.getElementById("uploadForm").addEventListener("submit", function(e) {
 
 </script>
 <script>
-const path = document.getElementById("graphPath");
-const dot = document.querySelector(".dot");
+const cpuPath = document.getElementById("cpuPath");
+const memPath = document.getElementById("memPath");
+const dot = document.getElementById("dot");
 
-let t = 0;
+let cpuData = [];
+let memData = [];
 
-function generatePath() {
-    let points = [];
+function updateGraph() {
+    fetch("/metrics")
+        .then(res => res.json())
+        .then(data => {
+            cpuData.push(data.cpu);
+            memData.push(data.memory * 20);
 
-    for (let x = 0; x <= 300; x += 10) {
-        let y = 40 + Math.sin((x + t) * 0.05) * 20;
-        points.push(`${x},${y}`);
+            if (cpuData.length > 30) {
+                cpuData.shift();
+                memData.shift();
+            }
+
+            drawGraph();
+        });
+}
+
+function drawGraph() {
+    let cpuPoints = cpuData.map((v, i) => `${i * 10},${120 - v}`);
+    let memPoints = memData.map((v, i) => `${i * 10},${120 - v}`);
+
+    cpuPath.setAttribute("d", "M " + cpuPoints.join(" L "));
+    memPath.setAttribute("d", "M " + memPoints.join(" L "));
+
+    if (cpuPoints.length > 0) {
+        let last = cpuPoints[cpuPoints.length - 1].split(",");
+        dot.setAttribute("cx", last[0]);
+        dot.setAttribute("cy", last[1]);
     }
-
-    return "M " + points.join(" L ");
 }
 
-function animateGraph() {
-    t += 2;
-
-    const d = generatePath();
-    path.setAttribute("d", d);
-
-    const length = path.getTotalLength();
-    const point = path.getPointAtLength((t * 2) % length);
-
-    dot.setAttribute("cx", point.x);
-    dot.setAttribute("cy", point.y);
-
-    requestAnimationFrame(animateGraph);
-}
-
-animateGraph();
+setInterval(updateGraph, 1000);
+</script>
 </script>
 </body>
 </html>
