@@ -174,6 +174,16 @@ button:hover {
     backdrop-filter: blur(10px);
 }
 
+#dot {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { r: 4; opacity: 1; }
+    50% { r: 7; opacity: 0.6; }
+    100% { r: 4; opacity: 1; }
+}
+
 /* progress */
 .progress-container {
     height: 20px;
@@ -484,19 +494,32 @@ function updateGraph() {
         });
 }
 
+function smoothPath(points) {
+    let d = "M " + points[0];
+
+    for (let i = 1; i < points.length; i++) {
+        let [x1, y1] = points[i - 1].split(",").map(Number);
+        let [x2, y2] = points[i].split(",").map(Number);
+
+        let cx = (x1 + x2) / 2;
+        d += ` Q ${x1},${y1} ${cx},${(y1 + y2) / 2}`;
+    }
+
+    return d;
+}
+
 function drawGraph() {
+    if (cpuData.length < 2) return;
+
     let cpuPoints = cpuData.map((v, i) => `${i * 10},${120 - v}`);
     let memPoints = memData.map((v, i) => `${i * 10},${120 - v}`);
 
-    cpuPath.setAttribute("d", "M " + cpuPoints.join(" L "));
-    memPath.setAttribute("d", "M " + memPoints.join(" L "));
+    cpuPath.setAttribute("d", smoothPath(cpuPoints));
+    memPath.setAttribute("d", smoothPath(memPoints));
 
-    if (cpuPoints.length > 0) {
     let last = cpuPoints[cpuPoints.length - 1].split(",");
-
     dot.setAttribute("cx", last[0]);
     dot.setAttribute("cy", last[1]);
-}
 }
 
 setInterval(updateGraph, 1000);

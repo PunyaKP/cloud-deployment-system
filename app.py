@@ -49,14 +49,22 @@ def deploy():
 
     except Exception as e:
         return f"Error occurred: {e}"
-    import random
-from flask import jsonify
 
-@app.route("/metrics")
+@app.route('/metrics')
 def metrics():
+    cpu_value = getattr(app, "cpu_value", 50)
+    cpu_value += random.randint(-5, 5)
+    cpu_value = max(10, min(90, cpu_value))
+    app.cpu_value = cpu_value
+
+    memory_value = getattr(app, "mem_value", 40)
+    memory_value += random.randint(-3, 3)
+    memory_value = max(20, min(80, memory_value))
+    app.mem_value = memory_value
+
     return jsonify({
-        "cpu": random.randint(10, 90),
-        "memory": round(random.uniform(1.0, 3.5), 1)
+        "cpu": cpu_value,
+        "memory": memory_value
     })
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
