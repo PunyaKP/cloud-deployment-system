@@ -5,7 +5,7 @@ import random
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = os.path.join(os.getcwd(), "uploads")
+UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Home page
@@ -25,8 +25,6 @@ def deploy():
     # Save file
     filepath = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(filepath)
-
-    print("Saved at:", filepath)
 
     try:
         # Git commands
@@ -51,7 +49,7 @@ def deploy():
 
     except Exception as e:
         return f"Error occurred: {e}"
-    from flask import send_from_directory
+    
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
