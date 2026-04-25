@@ -4,25 +4,30 @@
     <title>Cloud Deployment</title>
     <style>
         :root {
-    --primary: #f97316;   /* main orange */
-    --secondary: #ea580c; /* darker orange */
-    --bg: #020617;
-    --card: #0f172a;
-    --text: #e2e8f0;
+    --bg: #020617;            /* deep black-blue */
+    --card: #0f172a;          /* dark blue */
+    --card-light: #1e293b;    /* slightly lighter */
+    
+    --primary: #38bdf8;       /* light blue */
+    --secondary: #0ea5e9;     /* blue */
+    
+    --text: #f1f5f9;          /* white */
+    --muted: #94a3b8;         /* soft gray */
 }
     body {
-        margin: 0;
-        font-family: 'Poppins', sans-serif;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
 
-         background:
-            radial-gradient(circle at 20% 20%, rgba(249,115,22,0.15), transparent),
-            radial-gradient(circle at 80% 80%, rgba(0,114,255,0.12), transparent),
-            #020617;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(56,189,248,0.15), transparent),
+        radial-gradient(circle at 80% 80%, rgba(14,165,233,0.12), transparent),
+        var(--bg);
 
-        min-height: 100vh;
-        overflow-x: hidden;
+    color: var(--text);
+
+    min-height: 100vh;
+    overflow-x: hidden;
 }
-
 /* container */
 .container {
     width: 90%;
@@ -48,45 +53,27 @@ h1 {
 
 .card {
     flex: 1;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(14px);
+
     padding: 20px;
-    border-radius: 16px;
+    border-radius: 14px;
 
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
 
-    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 
+        0 10px 30px rgba(0,0,0,0.6),
+        0 0 20px rgba(56,189,248,0.05);
 
-    box-shadow:
-        0 8px 32px rgba(0,0,0,0.5),
-        inset 0 0 10px rgba(255,255,255,0.05);
-
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    .card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 3px;
-
-    background: linear-gradient(90deg, transparent, #00ffcc, transparent);
-    transition: 0.5s;
-}
-
-.card:hover::before {
-    left: 100%;
-}
+    transition: 0.3s;
 }
 .card:hover {
-    transform: translateY(-6px) scale(1.01);
+    transform: translateY(-6px) scale(1.02);
 
     box-shadow:
-        0 15px 40px rgba(0,0,0,0.7),
-        0 0 20px rgba(0,255,204,0.4);
+        0 20px 40px rgba(0,0,0,0.8),
+        0 0 25px rgba(56,189,248,0.15);
 }
-
 
 
 /* form */
@@ -96,7 +83,7 @@ form {
 }
 
 button {
-    background: linear-gradient(135deg, var(--primary),varr(--secondary));
+    background: linear-gradient(135deg, var(--primary),var(--secondary));
     border: none;
     padding: 12px 25px;
     border-radius: 10px;
@@ -108,7 +95,7 @@ button {
 
 button:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
+    box-shadow: 0 0 20px rgba(56,189,248,0.3);
 }
 
 /* pipeline */
@@ -190,20 +177,19 @@ button:hover {
 #progressBar {
     height: 100%;
     width: 0%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
 
-    background: var(--primary);
+    transition: width 0.5s ease-in-out;
 
-    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-
-    #progressBar {
-    box-shadow: 0 0 8px rgba(249, 115, 22, 0.5);
-}
+    box-shadow:
+        0 0 10px rgba(56,189,248,0.6),
+        0 0 20px rgba(56,189,248,0.4);
 }
 
 #statusText {
     font-weight: bold;
     color: var(--primary);
-    text-shadow: 0 0 6px rgba(249, 115, 22, 0.5);
+    text-shadow: 0 0 6px rgba(56,189,248,0.6);
 }
 
 #statusText.active {
@@ -247,7 +233,7 @@ h1 {
 <div class="container">
 
     <!-- HEADER -->
-    <h1>🚀 Cloud Deployment Dashboard</h1>
+    <h1>🚀 Cloud Deployment </h1>
     <div class="top-line"></div>
     <!-- STATS -->
     <div class="stats">
