@@ -167,6 +167,13 @@ button:hover {
     transition: 0.3s;
 }
 
+.graph-container {
+    padding: 20px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(10px);
+}
+
 /* progress */
 .progress-container {
     height: 20px;
@@ -311,23 +318,55 @@ h1 {
             <div class="graph-container">
     <h3>📊 Live System Activity</h3>
 
-    <svg viewBox="0 0 300 120" width="100%" height="150">
-        <defs>
-            <linearGradient id="cpuGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#38bdf8"/>
-                <stop offset="100%" stop-color="#22c55e"/>
-            </linearGradient>
-        </defs>
+    <svg viewBox="0 0 300 120" width="100%" height="200">
+    <defs>
+        <!-- Glow filter -->
+        <filter id="glow">
+            <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+            <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
 
-        <!-- CPU line -->
-        <path id="cpuPath" fill="none" stroke="url(#cpuGradient)" stroke-width="3"/>
+        <!-- CPU Gradient -->
+        <linearGradient id="cpuGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#38bdf8"/>
+            <stop offset="100%" stop-color="#22c55e"/>
+        </linearGradient>
 
-        <!-- Memory line -->
-        <path id="memPath" fill="none" stroke="#f97316" stroke-width="2"/>
+        <!-- Memory Gradient -->
+        <linearGradient id="memGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#f97316"/>
+            <stop offset="100%" stop-color="#facc15"/>
+        </linearGradient>
+    </defs>
 
-        <!-- moving dot -->
-        <circle id="dot" r="4" fill="#38bdf8"/>
-    </svg>
+    <!-- Grid lines -->
+    <g opacity="0.1">
+        <line x1="0" y1="30" x2="300" y2="30" stroke="white"/>
+        <line x1="0" y1="60" x2="300" y2="60" stroke="white"/>
+        <line x1="0" y1="90" x2="300" y2="90" stroke="white"/>
+    </g>
+
+    <!-- CPU -->
+    <path id="cpuPath"
+        fill="none"
+        stroke="url(#cpuGradient)"
+        stroke-width="3"
+        filter="url(#glow)"
+        stroke-linecap="round"/>
+
+    <!-- Memory -->
+    <path id="memPath"
+        fill="none"
+        stroke="url(#memGradient)"
+        stroke-width="2"
+        stroke-linecap="round"/>
+
+    <!-- Moving dot -->
+    <circle id="dot" r="5" fill="#38bdf8" filter="url(#glow)"/>
+</svg>
 </div>
 </div>
             <div class="progress-container">
