@@ -311,7 +311,7 @@ h1 {
             <div class="graph-container">
     <h3>📊 Live System Activity</h3>
 
-    <svg class="graph" viewBox="0 0 300 120">
+    <svg viewBox="0 0 300 120" width="100%" height="150">
         <defs>
             <linearGradient id="cpuGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="#38bdf8"/>
@@ -453,13 +453,15 @@ function drawGraph() {
     memPath.setAttribute("d", "M " + memPoints.join(" L "));
 
     if (cpuPoints.length > 0) {
-        let last = cpuPoints[cpuPoints.length - 1].split(",");
-        dot.setAttribute("cx", last[0]);
-        dot.setAttribute("cy", last[1]);
-    }
+    let last = cpuPoints[cpuPoints.length - 1].split(",");
+
+    dot.setAttribute("cx", last[0]);
+    dot.setAttribute("cy", last[1]);
+}
 }
 
 setInterval(updateGraph, 1000);
+updateGraph();
 </script>
 </script>
 </body>
