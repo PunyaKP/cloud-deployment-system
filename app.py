@@ -71,6 +71,23 @@ def metrics():
         "cpu": cpu_value,
         "memory": memory_value
     })
+@app.route('/files')
+def list_files():
+    search = request.args.get('q', '').lower()
+    files = []
+    for fname in os.listdir(UPLOAD_FOLDER):
+        if search and search not in fname.lower():
+            continue
+        fpath = os.path.join(UPLOAD_FOLDER, fname)
+        stat = os.stat(fpath)
+        files.append({
+            "name": fname,
+            "size": round(stat.st_size / 1024, 1),   # KB
+            "modified": time.strftime('%Y-%m-%d %H:%M', time.localtime(stat.st_mtime)),
+            "url": f"/uploads/{fname}"
+        })
+    files.sort(key=lambda x: x['modified'], reverse=True)
+    return jsonify(files)
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
 
